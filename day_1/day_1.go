@@ -39,7 +39,6 @@ func main() {
 	var right_index int = 0
 	var sim_score int = 0
 	var occs int
-	var same_flag bool = false
 	for i := 0; i < len(left); i++ {
 		//part 1
 		dist_temp = left[i] - right[i]
@@ -48,14 +47,9 @@ func main() {
 		}
 		dist += dist_temp
 		//part 2
-		same_flag = false
-		if i > 0 && left[i] == left[i-1] {
-			sim_score += left[i] * occs
-			same_flag = true
-		}
 		occs = 0
 		var dist_temp2 int = left[i] - right[right_index]
-		if dist_temp2 >= 0 && !same_flag {
+		if dist_temp2 >= 0 {
 			for dist_temp2 >= 0 {
 				if dist_temp2 == 0 {
 					occs += 1
