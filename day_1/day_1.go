@@ -1,75 +1,38 @@
 package main
 
 import (
-	//	"bufio"
+	"bufio"
 	"fmt"
-	"io"
+	"log"
 	"os"
 	"sort"
 	"strconv"
 	"time"
 )
 
-// func check(e error) {
-// 	if e != nil {
-// 		panic(e)
-// 	}
-// }
-
 func main() {
 	start := time.Now()
-	//dat, err := os.ReadFile("../inputs/day_1")
-	//check(err)
-	//fmt.Print(string(dat))
 	f, err := os.Open("../inputs/day_1.txt")
-	//check(err)
+	if err != nil {
+		log.Fatalf("Failed to open file %s: %v", f.Name(), err)
+	}
 	var left []int
 	var right []int
-	b1 := make([]byte, 0)
-	n1, err := f.Read(b1)
 	var temp int
-
-	var flag bool = true
-	for flag {
-		b1 = make([]byte, 5)
-		n1, err = f.Read(b1)
-		//		check(err)
-
-		temp, err = strconv.Atoi(string(b1[:n1]))
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		line := scanner.Text()
+		temp, err = strconv.Atoi(line[0:4])
 		left = append(left, temp)
-
-		b1 = make([]byte, 3)
-		n1, err = f.Read(b1)
-		//		check(err)
-
-		b1 = make([]byte, 5)
-		n1, err = f.Read(b1)
-		//		check(err)
-		temp, err = strconv.Atoi(string(b1[:n1]))
+		temp, err = strconv.Atoi(line[8:12])
 		right = append(right, temp)
-
-		b1 = make([]byte, 1)
-		n1, err = f.Read(b1)
-		//		check(err)
-
-		if err == io.EOF {
-			flag = false
-		}
 	}
-
-	//fmt.Printf("%v", left)
-	//fmt.Printf("%v", right)
 	sort.Slice(left, func(i, j int) bool {
 		return left[i] < left[j]
 	})
-
 	sort.Slice(right, func(i, j int) bool {
 		return right[i] < right[j]
 	})
-
-	// fmt.Printf("%v", left)
-	//fmt.Printf("%v", right)
-
 	var dist int = 0
 	var dist_temp int
 	var right_index int = 0
@@ -105,10 +68,8 @@ func main() {
 			}
 			sim_score += left[i] * occs
 		}
-
 	}
-	// fmt.Printf("%d\n", sim_score)
+	fmt.Printf("%d, %d\n", dist, sim_score)
 	elapsed := time.Since(start)
 	fmt.Printf("%s\n", elapsed)
-	fmt.Printf("%d, %d\n", dist, sim_score)
 }
