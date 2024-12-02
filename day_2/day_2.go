@@ -10,47 +10,45 @@ import (
 	"time"
 )
 
-func check_line(nums []int) ([]int, bool) {
+func check_line(nums []int) bool {
 
 	var inc bool
 	var dec bool
 	inc = false
 	dec = false
 	var safe bool = false
-	var unsafes []int
-	unsafes = nil
 	for i := 1; i < len(nums); i++ {
 		dist_temp := nums[i] - nums[i-1]
 		if dist_temp == 0 || dist_temp >= 4 || dist_temp <= -4 {
 			inc = false
 			dec = false
-			unsafes = append(unsafes, i)
+			break
 		} else if dist_temp < 4 && dist_temp > 0 {
 			if !inc && !dec {
 				inc = true
 			} else if dec {
 				dec = false
-				unsafes = append(unsafes, i)
+				break
 			}
 		} else {
 			if !inc && !dec {
 				dec = true
 			} else if inc {
 				inc = false
-				unsafes = append(unsafes, i)
+				break
 			}
 
 		}
 	}
-	if inc || dec && len(unsafes) == 0 {
-		fmt.Printf("%v\n", nums)
-		fmt.Printf("%t %t\n", inc, dec)
+	if inc || dec {
+		// fmt.Printf("%v\n", nums)
+		// fmt.Printf("%t %t\n", inc, dec)
 		safe = true
 	} else {
-		fmt.Printf("%v\n", nums)
+		// fmt.Printf("%v\n", nums)
 
 	}
-	return unsafes, safe
+	return safe
 }
 
 func main() {
@@ -72,84 +70,27 @@ func main() {
 			temp_num, err = strconv.Atoi(strs[i])
 			nums = append(nums, temp_num)
 		}
-		unsafes, safe := check_line(nums)
-		if len(unsafes) == 0 && safe {
+		var safe bool = false
+		safe = check_line(nums)
+		if safe {
 			safe_total += 1
-			fmt.Printf("SAFE\n")
-		} else if len(unsafes) == 2 {
-			if unsafes[1]-unsafes[0] == 1 {
-				var nums2 []int
-				// fmt.Printf("%v\n", nums)
-				var index int = unsafes[1]
-				fmt.Printf("%d\n", index)
-
-				nums2 = append(nums2, nums[:index]...)
-				nums2 = append(nums2, nums[index+1:]...)
-				unsafes, safe = check_line(nums2)
-				if len(unsafes) == 0 && safe {
-					safe_total += 1
-					fmt.Printf("SAFE\n")
-				} else {
-					var nums2 []int
-					// fmt.Printf("%v\n", nums)
-					var index int = unsafes[0]
-					fmt.Printf("%d\n", index)
-
-					nums2 = append(nums2, nums[:index]...)
-					nums2 = append(nums2, nums[index+1:]...)
-					unsafes, safe = check_line(nums2)
-					if len(unsafes) == 0 && safe {
-						safe_total += 1
-						fmt.Printf("SAFE\n")
-					}
-
-				}
-			}
-		} else if len(unsafes) == 1 {
-			fmt.Printf("one unsafe\n")
-			//remove right number
+			// fmt.Printf("SAFE\n")
+		} else {
+			// fmt.Printf("unsafe\n")
 			var nums2 []int
-			// fmt.Printf("%v\n", nums)
-			var index int = unsafes[0]
-			fmt.Printf("%d\n", index)
-
-			nums2 = append(nums2, nums[:index]...)
-			nums2 = append(nums2, nums[index+1:]...)
-			unsafes2, safe2 := check_line(nums2)
-			if len(unsafes2) == 0 && safe2 {
-				safe_total += 1
-				fmt.Printf("SAFE\n")
-			} else {
-				//remove left number
+			for i := 0; i < len(nums); i++ {
 				nums2 = nil
+				nums2 = append(nums2, nums[:i]...)
+				nums2 = append(nums2, nums[i+1:]...)
+
 				// fmt.Printf("%v\n", nums)
-				index = unsafes[0] - 1
-				fmt.Printf("%d\n", index)
-				if index >= 0 {
-					nums2 = append(nums2, nums[:index]...)
-					nums2 = append(nums2, nums[index+1:]...)
-					unsafes, safe = check_line(nums2)
-					if len(unsafes) == 0 && safe {
-						safe_total += 1
-						fmt.Printf("SAFE\n")
-					} else {
+				// fmt.Printf("%v\n", nums2)
 
-						//remove left number
-						nums2 = nil
-						// fmt.Printf("%v\n", nums)
-						index = unsafes[0] - 2
-						fmt.Printf("%d\n", index)
-						if index >= 0 {
-
-							nums2 = append(nums2, nums[:index]...)
-							nums2 = append(nums2, nums[index+1:]...)
-							unsafes, safe = check_line(nums2)
-							if len(unsafes) == 0 && safe {
-								safe_total += 1
-								fmt.Printf("SAFE\n")
-							}
-						}
-					}
+				safe = check_line(nums2)
+				if safe {
+					safe_total += 1
+					// fmt.Printf("SAFE\n")
+					break
 				}
 			}
 		}
