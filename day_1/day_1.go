@@ -22,9 +22,9 @@ func main() {
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		line := scanner.Text()
-		temp, err = strconv.Atoi(line[0:4])
+		temp, err = strconv.Atoi(line[0:5])
 		left = append(left, temp)
-		temp, err = strconv.Atoi(line[8:12])
+		temp, err = strconv.Atoi(line[8:13])
 		right = append(right, temp)
 	}
 	sort.Slice(left, func(i, j int) bool {
@@ -33,6 +33,7 @@ func main() {
 	sort.Slice(right, func(i, j int) bool {
 		return right[i] < right[j]
 	})
+
 	var dist int = 0
 	var dist_temp int
 	var right_index int = 0
