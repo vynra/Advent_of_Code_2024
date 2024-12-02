@@ -37,16 +37,10 @@ func check_line(nums []int) bool {
 				inc = false
 				break
 			}
-
 		}
 	}
 	if inc || dec {
-		// fmt.Printf("%v\n", nums)
-		// fmt.Printf("%t %t\n", inc, dec)
 		safe = true
-	} else {
-		// fmt.Printf("%v\n", nums)
-
 	}
 	return safe
 }
@@ -74,27 +68,21 @@ func main() {
 		safe = check_line(nums)
 		if safe {
 			safe_total += 1
-			// fmt.Printf("SAFE\n")
 		} else {
-			// fmt.Printf("unsafe\n")
 			var nums2 []int
 			for i := 0; i < len(nums); i++ {
 				nums2 = nil
 				nums2 = append(nums2, nums[:i]...)
 				nums2 = append(nums2, nums[i+1:]...)
-
-				// fmt.Printf("%v\n", nums)
-				// fmt.Printf("%v\n", nums2)
-
 				safe = check_line(nums2)
 				if safe {
 					safe_total += 1
-					// fmt.Printf("SAFE\n")
 					break
 				}
 			}
 		}
 	}
+
 	fmt.Printf("%d\n", safe_total)
 	elapsed := time.Since(start)
 	fmt.Printf("%s\n", elapsed)
