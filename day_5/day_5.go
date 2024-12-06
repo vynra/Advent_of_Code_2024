@@ -49,7 +49,8 @@ func main() {
 	}
 	var pages []Page
 	scanner := bufio.NewScanner(f)
-	var total = 0
+	var total_1 = 0
+	// var total_2 = 0
 	for scanner.Scan() {
 		// fmt.Printf("READING LINE %d\n", line_num)
 		line := scanner.Text()
@@ -59,6 +60,7 @@ func main() {
 		if len(split) == 1 {
 
 			split := strings.Split(line, ",")
+			// var new_line []int
 			if len(split) != 1 {
 				fmt.Printf("%v\n", split)
 
@@ -87,8 +89,8 @@ func main() {
 				}
 				if line_valid {
 					page_num, _ := strconv.Atoi(split[len(split)/2])
-					total += page_num
-					fmt.Printf("%d\n", total)
+					total_1 += page_num
+					fmt.Printf("%d\n", total_1)
 				}
 			}
 
@@ -124,7 +126,7 @@ func main() {
 
 		fmt.Printf("%v\n", page)
 	}
-	fmt.Printf("%d\n", total)
+	fmt.Printf("%d\n", total_1)
 	part_1()
 	part_2()
 }
