@@ -42,9 +42,7 @@ func print_map() {
 }
 
 func move(x int, y int, direction string, loop bool) bool {
-	// fmt.Printf("%d, %d, %v, %s, %t\n", x, y, dirs[x][y], direction, loop)
 	period_byte := []byte(".")
-	// fmt.Printf("%v\n", period_byte)
 	if x < 0 || y < 0 || x >= len(coords[0]) || y >= len(coords) {
 		return loop
 	}
@@ -116,7 +114,6 @@ func move(x int, y int, direction string, loop bool) bool {
 	case "left":
 		if dirs[y][x].left {
 			loop = true
-			// fmt.Printf("LOOOOOOOOOOOOOOOP\n")
 			return loop
 		}
 		dirs[y][x].left = true
@@ -126,11 +123,10 @@ func move(x int, y int, direction string, loop bool) bool {
 			loop = move(x, y, "up", loop)
 		}
 	}
-	// fmt.Printf("%d, %d, %v, %s, %t\n", x, y, dirs[x][y], direction, loop)
 	return loop
 }
 
-func part_1() {
+func main() {
 	start := time.Now()
 	f, _ := os.Open("../inputs/day_6.txt")
 
@@ -138,7 +134,6 @@ func part_1() {
 	var start_1 int
 	var start_2 int
 	for scanner.Scan() {
-		// fmt.Printf("READING LINE %d\n", line_num)
 		line := scanner.Text()
 		pos := strings.Index(line, "^")
 		if pos != -1 {
@@ -165,8 +160,6 @@ func part_1() {
 
 	move(start_1, start_2, "up", false)
 
-	// print_coords()
-	// print_map()
 	var total_coords int = 0
 	var total_obs int = 0
 	for i := 0; i < len(coords); i++ {
@@ -192,16 +185,4 @@ func part_1() {
 	fmt.Printf("%d %d\n", total_coords, total_obs)
 	elapsed := time.Since(start)
 	fmt.Printf("%s\n", elapsed)
-}
-
-func part_2() {
-	start := time.Now()
-	elapsed := time.Since(start)
-	fmt.Printf("%s\n", elapsed)
-
-}
-
-func main() {
-	part_1()
-	part_2()
 }
