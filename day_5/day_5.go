@@ -43,7 +43,7 @@ func part_2() {
 
 func main() {
 
-	f, err := os.Open("../inputs/day_5_ex.txt")
+	f, err := os.Open("../inputs/day_5.txt")
 	if err != nil {
 		log.Fatalf("Failed to open file %s: %v", f.Name(), err)
 	}
@@ -70,10 +70,11 @@ func main() {
 					curr_page := pages[curr_page_i]
 					var page_valid = true
 				check_line:
-					for j := 0; j < len(curr_page.pages_b4); j++ {
+					for k := i; k < len(split); k++ {
 					check_page:
-						for k := i; k < len(split); k++ {
-							if string(curr_page.pages_b4[j]) == split[k] {
+						for j := 0; j < len(curr_page.pages_b4); j++ {
+							page_num2, _ := strconv.Atoi(split[k])
+							if curr_page.pages_b4[j] == page_num2 {
 								page_valid = false
 								break check_page
 							}
