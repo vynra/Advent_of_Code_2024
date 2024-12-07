@@ -20,20 +20,18 @@ func check_op(goal int, curr_val int, nums []string) bool {
 		} else {
 			return false
 		}
+
 	}
-	var mult_curr_val int = curr_val
-	var add_curr_val int = curr_val
-	var cat_curr_val string
 	num, _ := strconv.Atoi(nums[0])
-	mult_curr_val *= num
-	if check_op(goal, mult_curr_val, nums[1:]) {
+	if check_op(goal, curr_val*num, nums[1:]) {
 		return true
 	}
-	add_curr_val += num
-	if check_op(goal, add_curr_val, nums[1:]) {
+
+	if check_op(goal, curr_val+num, nums[1:]) {
 		return true
 	}
-	cat_curr_val = strconv.Itoa(curr_val) + nums[0]
+
+	cat_curr_val := strconv.Itoa(curr_val) + nums[0]
 	temp, _ := strconv.Atoi(cat_curr_val)
 	if check_op(goal, temp, nums[1:]) {
 		return true
@@ -50,6 +48,7 @@ func main() {
 	}
 	scanner := bufio.NewScanner(f)
 	var total int = 0
+
 	for scanner.Scan() {
 		line := scanner.Text()
 		split := strings.Split(line, ":")
@@ -61,6 +60,7 @@ func main() {
 			total += goal
 		}
 	}
+
 	fmt.Printf("%d\n", total)
 	elapsed := time.Since(start)
 	fmt.Printf("%s\n", elapsed)
