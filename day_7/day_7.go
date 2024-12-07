@@ -14,10 +14,6 @@ func check_op(goal int, curr_val int, nums []string) bool {
 	var mult_curr_val int = curr_val
 	var add_curr_val int = curr_val
 	var cat_curr_val string
-	// fmt.Printf("%d, %d, %v\n", goal, curr_val, nums)
-	var mult bool
-	var add bool
-	var cat bool
 	if curr_val > goal {
 		return false
 	}
@@ -30,14 +26,19 @@ func check_op(goal int, curr_val int, nums []string) bool {
 	}
 	num, _ := strconv.Atoi(nums[0])
 	mult_curr_val *= num
-	mult = check_op(goal, mult_curr_val, nums[1:])
+	if check_op(goal, mult_curr_val, nums[1:]) {
+		return true
+	}
 	add_curr_val += num
-	add = check_op(goal, add_curr_val, nums[1:])
+	if check_op(goal, add_curr_val, nums[1:]) {
+		return true
+	}
 	cat_curr_val = strconv.Itoa(curr_val) + nums[0]
-	// fmt.Printf("POST CAT %s\n", cat_curr_val)
 	temp, _ := strconv.Atoi(cat_curr_val)
-	cat = check_op(goal, temp, nums[1:])
-	return mult || add || cat
+	if check_op(goal, temp, nums[1:]) {
+		return true
+	}
+	return false
 }
 
 func main() {
@@ -55,7 +56,6 @@ func main() {
 		goal, _ := strconv.Atoi(split[0])
 		split2 := strings.Split(split[1], " ")
 		start_num, _ := strconv.Atoi(split2[1])
-		// fmt.Printf("%v\n", split2[2:])
 		valid := check_op(goal, start_num, split2[2:])
 		if valid {
 			total += goal
