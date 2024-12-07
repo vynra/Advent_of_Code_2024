@@ -11,9 +11,6 @@ import (
 )
 
 func check_op(goal int, curr_val int, nums []string) bool {
-	var mult_curr_val int = curr_val
-	var add_curr_val int = curr_val
-	var cat_curr_val string
 	if curr_val > goal {
 		return false
 	}
@@ -24,6 +21,9 @@ func check_op(goal int, curr_val int, nums []string) bool {
 			return false
 		}
 	}
+	var mult_curr_val int = curr_val
+	var add_curr_val int = curr_val
+	var cat_curr_val string
 	num, _ := strconv.Atoi(nums[0])
 	mult_curr_val *= num
 	if check_op(goal, mult_curr_val, nums[1:]) {
