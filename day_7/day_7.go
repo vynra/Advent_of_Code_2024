@@ -20,8 +20,8 @@ func check_op_1(goal int, curr_val int, nums []string) bool {
 		} else {
 			return false
 		}
-
 	}
+
 	num, _ := strconv.Atoi(nums[0])
 	if check_op_1(goal, curr_val*num, nums[1:]) {
 		return true
@@ -44,8 +44,8 @@ func check_op_2(goal int, curr_val int, nums []string) bool {
 		} else {
 			return false
 		}
-
 	}
+
 	num, _ := strconv.Atoi(nums[0])
 	if check_op_2(goal, curr_val*num, nums[1:]) {
 		return true
@@ -70,6 +70,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to open file %s: %v", f.Name(), err)
 	}
+
 	scanner := bufio.NewScanner(f)
 	var total_1 int = 0
 	var total_2 int = 0
