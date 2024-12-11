@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-
 	// "strconv"
 	// "strings"
 	"slices"
@@ -52,11 +51,10 @@ func remove_blank(blanks []blank, i int) []blank {
 	return append(blanks[:i], blanks[i+1:]...)
 }
 
-func part_2(disk_map []int) int {
-	// fmt.Printf("%v\n", disk_map)
+func calc_blanks(disk_map []int) []blank {
+
 	var blank_start int = 0
 	var is_blank bool = false
-
 	var blanks []blank
 	for i := 0; i < len(disk_map); i++ {
 		if disk_map[i] == -1 {
@@ -72,10 +70,18 @@ func part_2(disk_map []int) int {
 			}
 		}
 	}
+	return blanks
+}
 
+func part_2(disk_map []int) int {
+	// fmt.Printf("%v\n", disk_map)
+
+	// fmt.Printf("%v\n", blanks)
+	blanks := calc_blanks(disk_map)
 	var file_end int = len(disk_map) - 1
 	var is_file bool = true
 	for i := len(disk_map) - 2; i > -1; i-- {
+		blanks = calc_blanks(disk_map)
 		// fmt.Printf("%v\n", blanks)
 		// fmt.Printf("current: %d\n", disk_map[i])
 		if disk_map[i] != -2 && disk_map[i] == disk_map[i+1] {
@@ -130,7 +136,6 @@ func part_2(disk_map []int) int {
 		}
 	}
 	return total
-
 }
 
 func main() {
