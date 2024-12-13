@@ -15,7 +15,8 @@ import (
 var lines []string
 var trailheads []trailhead
 var peaks []peak
-var locs []*loc
+var locs []loc
+var curr_route []loc
 
 type loc struct {
 	x       int
@@ -43,19 +44,22 @@ func check_trail(y int, x int, curr_height int, thi int, curr_route []loc) bool 
 	var down bool = false
 	var left bool = false
 	curloc_i := slices.IndexFunc(locs, func(l loc) bool { return l.x == x && l.y == y })
+	for i := 0; i < len(curr_route); i++ {
+		fmt.Printf("%v\n", curr_route[i])
+	}
 	// fmt.Printf("%d\n", curloc_i)
 	if curloc_i == -1 {
 		curloc = loc{x: x, y: y, visited: true}
-		locs = append(locs, &curloc)
+		locs = append(locs, curloc)
 		// fmt.Printf("NEW LOC\n")
-		fmt.Printf("%d, %d, %d, %d\n", x, y, curr_height, byte(curr_height+1))
+		// fmt.Printf("%d, %d, %d, %d\n", x, y, curr_height, byte(curr_height+1))
 		// fmt.Printf("left: %d, %d\n", lines[y][x-1], byte(curr_height+1))
 
 		// fmt.Printf("Height: %d\n", curr_height)
 		if x > 0 && lines[y][x-1]-48 == byte(curr_height+1) {
 			fmt.Printf("LEFT\n")
+			curr_route = append(curr_route, curloc)
 			if check_trail(y, x-1, curr_height+1, thi, curr_route) {
-				curr_route = append(curr_route, curloc)
 				left = true
 			}
 
@@ -63,22 +67,23 @@ func check_trail(y int, x int, curr_height int, thi int, curr_route []loc) bool 
 		// fmt.Printf("WHYYYYYYYY: %d\n", y)
 		if y > 0 && lines[y-1][x]-48 == byte(curr_height+1) {
 			fmt.Printf("UP\n")
+			curr_route = append(curr_route, curloc)
 			if check_trail(y-1, x, curr_height+1, thi, curr_route) {
-				curr_route = append(curr_route, curloc)
 				up = true
 			}
 		}
 		if x < len(lines[y])-1 && lines[y][x+1]-48 == byte(curr_height+1) {
 			fmt.Printf("RIGHT\n")
+			fmt.Printf("%v\n", curloc)
+			curr_route = append(curr_route, curloc)
 			if check_trail(y, x+1, curr_height+1, thi, curr_route) {
-				curr_route = append(curr_route, curloc)
 				right = true
 			}
 		}
 		if y < len(lines)-1 && lines[y+1][x]-48 == byte(curr_height+1) {
 			fmt.Printf("DOWN\n")
+			curr_route = append(curr_route, curloc)
 			if check_trail(y+1, x, curr_height+1, thi, curr_route) {
-				curr_route = append(curr_route, curloc)
 				down = true
 			}
 		}
@@ -87,6 +92,10 @@ func check_trail(y int, x int, curr_height int, thi int, curr_route []loc) bool 
 		if len(locs[curloc_i].peaks) > 0 {
 			fmt.Printf("ALREADY VISITED PEAK??\n")
 			trailheads[thi].peaks = append(trailheads[thi].peaks, locs[curloc_i].peaks...)
+			for j := 0; j < len(curr_route); j++ {
+				curloc_j := slices.IndexFunc(locs, func(l loc) bool { return l.x == curr_route[j].x && l.y == curr_route[j].y })
+				locs[curloc_j].peaks = append(curr_route[j].peaks, curloc.peaks...)
+			}
 			return true
 		}
 	}
@@ -94,8 +103,11 @@ func check_trail(y int, x int, curr_height int, thi int, curr_route []loc) bool 
 		temp_peak := peak{x: x, y: y}
 		fmt.Printf("ITS 9 PEAK??\n")
 		trailheads[thi].peaks = append(trailheads[thi].peaks, temp_peak)
+		fmt.Printf("current route:\n")
+
 		for j := 0; j < len(curr_route); j++ {
-			curr_route[j].peaks = append(curr_route[j].peaks, temp_peak)
+			curloc_j := slices.IndexFunc(locs, func(l loc) bool { return l.x == curr_route[j].x && l.y == curr_route[j].y })
+			locs[curloc_j].peaks = append(curr_route[j].peaks, temp_peak)
 		}
 		return true
 	}
@@ -128,13 +140,15 @@ func main() {
 		}
 	}
 	for i := 0; i < len(trailheads); i++ {
-		var curr_route []loc
 		check_trail(trailheads[i].y, trailheads[i].x, 0, i, curr_route)
 	}
 	for i := 0; i < len(trailheads); i++ {
 		fmt.Printf("%v\n", trailheads[i])
 	}
-	// fmt.Printf("%v\n", locs)
+	fmt.Printf("\n LOCS\n")
+	for i := 0; i < len(locs); i++ {
+		fmt.Printf("%v\n", locs[i])
+	}
 
 	elapsed := time.Since(start)
 	fmt.Printf("%s\n", elapsed)
